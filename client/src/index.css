@@ -1,0 +1,32 @@
+@import "materialize-css/dist/css/materialize.min.css";
+
+.result-link {
+    overflow-wrap: break-word;
+}
+
+.row.flexbox {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row.flexbox .col {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field label {
+    font-size: larger;
+}
+
+.btn-margin {
+    margin: 10px;
+}
+
+.qr-wrapper svg {
+    width: 80%;
+    height: auto;
+}
+
+.modal {
+    max-width: 75vh !important;
+}
