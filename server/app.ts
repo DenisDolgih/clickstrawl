@@ -11,7 +11,6 @@ const app = express();
 const PORT: number = config.get('port') || 3000;
 const DB: string = config.get('mongoURI');
 const longDomainURI: string = config.get('longDomainURI');
-const shortDomainURI: string = config.get('shortDomainURI');
 
 app.use(cors(
     {

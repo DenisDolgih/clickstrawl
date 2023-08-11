@@ -1,72 +1,58 @@
+// Define a cache name for your resources
+const CACHE_NAME = 'my-react-app-cache-v1';
 
-// Based off of https://github.com/pwa-builder/PWABuilder/blob/main/docs/sw.js
+// List of resources to cache
+const urlsToCache = [
+  '/',
+  '/assets/'
+];
 
-const HOSTNAME_WHITELIST = [
-    self.location.hostname,
-    'clickstrawl.com',
-    'fonts.googleapis.com'
-]
+// Install event: Cache the static assets
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
 
-// The Util Function to hack URLs of intercepted requests
-const getFixedUrl = (req) => {
-    var now = Date.now()
-    var url = new URL(req.url)
-
-    // 1. fixed http URL
-    // Just keep syncing with location.protocol
-    // fetch(httpURL) belongs to active mixed content.
-    // And fetch(httpRequest) is not supported yet.
-    url.protocol = self.location.protocol
-
-    // 2. add query for caching-busting.
-    if (url.hostname === self.location.hostname) {
-        url.search += (url.search ? '&' : '?') + 'cache-bust=' + now
-    }
-    return url.href
-}
-
-/**
- *  @Lifecycle Activate
- *  New one activated when old isnt being used.
- *
- *  waitUntil(): activating ====> activated
- */
-self.addEventListener('activate', event => {
-    event.waitUntil(self.clients.claim())
-})
-
-/**
- *  @Functional Fetch
- *  All network requests are being intercepted here.
- *
- *  void respondWith(Promise<Response> r)
- */
+// Fetch event: Serve cached resources if available, otherwise fetch from network
 self.addEventListener('fetch', event => {
-    // Skip some of cross-origin requests, like those for Google Analytics.
-    if (HOSTNAME_WHITELIST.indexOf(new URL(event.request.url).hostname) > -1) {
-        // Stale-while-revalidate
-        // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
-        // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
-        const cached = caches.match(event.request)
-        const fixedUrl = getFixedUrl(event.request)
-        const fetched = fetch(fixedUrl, { cache: 'no-store' })
-        const fetchedCopy = fetched.then(resp => resp.clone())
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Return the cached response if available
+        if (response) {
+          return response;
+        }
 
-        // Call respondWith() with whatever we get first.
-        // If the fetch fails (e.g disconnected), wait for the cache.
-        // If there’s nothing in cache, wait for the fetch.
-        // If neither yields a response, return offline pages.
-        event.respondWith(
-            Promise.race([fetched.catch(_ => cached), cached])
-                .then(resp => resp || fetched)
-                .catch(_ => { /* eat any errors */ })
-        )
+        // Otherwise, fetch from network and cache the response
+        return fetch(event.request)
+          .then(response => {
+            // Check if the response is valid
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
 
-        // Update the cache with the version we fetched (only for ok status)
-        event.waitUntil(
-            Promise.all([fetchedCopy, caches.open("pwa-cache")])
-                .then(([response, cache]) => response.ok && cache.put(event.request, response))
-                .catch(_ => { /* eat any errors */ })
-        )
-    }
-})
+            // Clone the response to cache and return it
+            const clonedResponse = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(event.request, clonedResponse));
+
+            return response;
+          });
+      })
+  );
+});
+
+// Activate event: Clean up old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
+            .map(cacheName => caches.delete(cacheName))
+        );
+      })
+  );
+});
