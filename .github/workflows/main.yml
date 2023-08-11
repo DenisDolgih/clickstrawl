@@ -28,14 +28,14 @@ jobs:
           cd client
           npm install
           npm run build
-          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/client/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:/var/www/clickstrawl.com
+          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/client/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_FRONTEND_PATH }}
 
       - name: Build and Deploy Server
         run: |
           cd server
           npm install
           npm run build
-          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:/var/www/cltrwl.com
+          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
           
       - name: Restart Backend with PM2
         run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }} 'pm2 restart ${{ secrets.BACKEND_APP_NAME_SECRET }}'
