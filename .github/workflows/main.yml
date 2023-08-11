@@ -25,6 +25,7 @@ jobs:
 
       - name: Build and Deploy Client
         run: |
+          echo "${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_FRONTEND_PATH }}"
           cd client
           npm install
           npm run build
