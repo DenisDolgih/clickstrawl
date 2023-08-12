@@ -44,4 +44,4 @@ jobs:
           rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
           
       - name: Restart Backend with PM2
-        run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }} 'pm2 restart ${{ secrets.BACKEND_APP_NAME_SECRET }}'
+        run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }} 'pm2 restart ${{ secrets.SERVER_BACKEND_PATH }}/${{ secrets.BACKEND_APP_NAME_SECRET }} --watch'
