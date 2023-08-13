@@ -1,10 +1,9 @@
 // Define a cache name for your resources
-const CACHE_NAME = 'my-react-app-cache-v1';
+const CACHE_NAME = 'link-builder-app-cache-v1';
 
 // List of resources to cache
 const urlsToCache = [
   '/',
-  '/assets/'
 ];
 
 // Install event: Cache the static assets
