@@ -14,8 +14,8 @@ const longDomainURI: string = config.get('longDomainURI');
 
 app.use(cors(
     {
-        origin: '*',
-        methods: ['GET', 'POST'],
+        origin: ['https://clickstrawl.com'],
+        methods: ['GET', 'POST', 'OPTIONS'],
     }
 ));
 
