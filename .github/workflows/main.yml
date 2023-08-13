@@ -53,4 +53,4 @@ jobs:
           ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'npm install && npm run build'
 
       - name: Restart Backend with PM2
-        run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'pm2 restart dist/app.js --watch'
+        run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }} 'pm2 restart ${{ secrets.SERVER_BACKEND_PATH }}/dist/app.js --watch'
