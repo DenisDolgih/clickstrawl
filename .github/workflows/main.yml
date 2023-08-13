@@ -30,19 +30,27 @@ jobs:
 
       - name: Build and Deploy Client
         run: |
-          echo "${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_FRONTEND_PATH }}"
+
           cd client
           npm install
           npm run build
           rsync -r --delete-after --quiet $GITHUB_WORKSPACE/client/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_FRONTEND_PATH }}
+
+      - name: Copy Server source files to remote and run npm install && npm run build
+        run: |
+          cd server
+          npm install
+          npm run build
+          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
+          ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'npm install && npm run build'
 
       - name: Build and Deploy Server
         run: |
           cd server
           npm install
           npm run build
-          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/dist/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
-          
+          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
+          ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'npm install && npm run build'
+
       - name: Restart Backend with PM2
-          echo "${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}"
-        run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'pm2 restart app.js --watch'
+        run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'pm2 restart dist/app.js --watch'
