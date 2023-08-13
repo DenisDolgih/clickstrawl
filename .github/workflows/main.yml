@@ -49,7 +49,7 @@ jobs:
           cd server
           npm install
           npm run build
-          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/server/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
+          rsync -r $GITHUB_WORKSPACE/server/ ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
           ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }} 'npm install && npm run build'
 
       - name: Restart Backend with PM2
