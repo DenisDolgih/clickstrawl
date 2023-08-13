@@ -7,11 +7,7 @@ const LinkShortenButton = ({ setResultLink, target }: Props) => {
 
     const shortenLink = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void => {
         e.preventDefault();
-        const url: string | false = (import.meta.env.LINK_SHORTENER as string) || false;
-        if (!url) {
-            console.error('No link shortener URL provided');
-            return;
-        }
+        const url: string = 'https://cltrwl.com';
         const data = { target };
         fetch(url, {
             method: 'POST',
