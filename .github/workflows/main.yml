@@ -42,6 +42,8 @@ jobs:
           npm install
           npm run build
           scp -r $GITHUB_WORKSPACE/server/dist/* ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
-          scp -r $GITHUB_WORKSPACE/server/node_modules ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
+          scp -r $GITHUB_WORKSPACE/server/package.json ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }}:${{ secrets.SERVER_BACKEND_PATH }}
+          ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }} 'cd ${{ secrets.SERVER_BACKEND_PATH }} && npm install'
+          
       - name: Restart Backend with PM2
         run: ssh ${{ secrets.USER_SECRET }}@${{ secrets.SERVER_IP_SECRET }} 'pm2 restart ${{ secrets.SERVER_BACKEND_PATH }}/app.js --watch'
