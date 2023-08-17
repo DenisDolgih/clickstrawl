@@ -87,6 +87,11 @@ app.get('/:route', (req, res) => {
     });
 });
 
+/**
+ * Generates a shorted link.
+ *
+ * @return {Promise<string>} The generated shorted link.
+ */
 const generateShortedLink = async () => {
     // get count of links in DB
     return Link.count({})
@@ -99,6 +104,11 @@ const generateShortedLink = async () => {
         });
 };
 
+/**
+ * This function starts the application by connecting to MongoDB and starting the server.
+ *
+ * @return {Promise<void>} - A promise that resolves when the application is successfully started.
+ */
 const start = async () => {
     try {
         await mongoose.connect(DB);
