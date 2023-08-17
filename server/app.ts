@@ -3,12 +3,18 @@ import config from 'config';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
 
 import Link from './models/Link';
 
 const app = express();
 
-const PORT: number = config.get('port') || 3000;
+// Construct the absolute path to the config file
+const configPath = path.join(__dirname, 'config', 'default.json');
+
+// Load the configuration
+config.util.extendDeep(config, require(configPath));
+const PORT: number = config.get('port') || 3001;
 const DB: string = config.get('mongoURI');
 const longDomainURI: string = config.get('longDomainURI');
 
