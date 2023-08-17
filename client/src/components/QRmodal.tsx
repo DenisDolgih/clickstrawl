@@ -5,6 +5,12 @@ interface Props {
     text: string;
 }
 
+/**
+ * Generates a QR modal component.
+ *
+ * @param {Props} text - The text to generate the QR code from.
+ * @return {JSX.Element} The QR modal component.
+ */
 const QRmodal = ({ text }: Props) => {
 
     const [qrCodeImage, setQRCodeImage] = useState<JSX.Element>(<></>);
@@ -29,6 +35,12 @@ const QRmodal = ({ text }: Props) => {
         [text]
     );
 
+    /**
+     * Downloads an SVG file when the provided event is triggered.
+     *
+     * @param {React.MouseEvent<HTMLAnchorElement, MouseEvent>} e - The event that triggered the download.
+     * @return {void} This function does not return a value.
+     */
     const downloadSVG = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void => {
         e.preventDefault()
 

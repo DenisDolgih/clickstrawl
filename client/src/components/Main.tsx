@@ -12,6 +12,11 @@ import isValidURL from '../mixins/isValidURL';
 
 import { ILinkUpdater } from '../interfaces/interfaces';
 
+/**
+ * Renders the Main component.
+ *
+ * @return {JSX.Element} The JSX element representing the Main component.
+ */
 const Main = (): JSX.Element => {
 
     interface ILinkObject {
@@ -22,6 +27,13 @@ const Main = (): JSX.Element => {
     const [resultLinkObject, setResultLinkObject] = useState<ILinkObject>({});
     const [resultLink, setResultLink] = useState<string>(url);
 
+    /**
+     * Updates the link object with the given parameter name and value.
+     *
+     * @param {string} parameterName - The name of the parameter.
+     * @param {string} parameterValue - The value of the parameter.
+     * @return {void} This function does not return a value.
+     */
     const updateLink: ILinkUpdater = (parameterName: string, parameterValue: string): void => {
         setResultLinkObject((prevState) => {
             return {
@@ -58,6 +70,12 @@ const Main = (): JSX.Element => {
         return <ParameterInput key={parameter.name} setResultLink={updateLink} parameter={parameter} />
     });
 
+    /**
+     * Checks if the given URL has query parameters.
+     *
+     * @param {string} url - The URL to check.
+     * @return {boolean} Returns true if the URL has query parameters, false otherwise.
+     */
     const hasQueryParameters = (url: string) => {
         try {
             const urlObject = new URL(url);
@@ -68,6 +86,12 @@ const Main = (): JSX.Element => {
         }
     }
 
+    /**
+     * Removes the trailing slash, question mark, or ampersand from a URL.
+     *
+     * @param {string} url - The URL to remove the trailing characters from.
+     * @return {string} - The URL with the trailing characters removed.
+     */
     const removeTail = (url: string): string => {
         if (url.endsWith('/') || url.endsWith('?') || url.endsWith('&')) {
             url = url.slice(0, -1);
@@ -75,6 +99,12 @@ const Main = (): JSX.Element => {
         return url;
     }
 
+    /**
+     * Removes any incorrect symbols from a given parameter that are not allowed in URL parameters.
+     *
+     * @param {string} parameter - The parameter to clean.
+     * @return {string} The cleaned parameter.
+     */
     const cleanParameter = (parameter: string): string => {
         // if parameter contains incorrect for URL parameters symbols, remove them
         return parameter.trim().replace(/[^a-z0-9+&@#/%?=~_|!:,.;-]/gi, '');

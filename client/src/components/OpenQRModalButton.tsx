@@ -1,3 +1,8 @@
+/**
+ * Generates an OpenQRModalButton component.
+ *
+ * @return {JSX.Element} The OpenQRModalButton component.
+ */
 const OpenQRModalButton = () => {
     return (
         <a className="waves-effect waves-light btn-large modal-trigger btn-margin" href="#qr-modal" >

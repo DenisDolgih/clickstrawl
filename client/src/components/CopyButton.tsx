@@ -6,6 +6,12 @@ interface Props {
 
 const CopyButton = ({ text }: Props) => {
 
+    /**
+     * Copies the provided text to the clipboard.
+     *
+     * @param {React.MouseEvent<HTMLAnchorElement, MouseEvent>} e - The click event that triggers the copy action.
+     * @return {void}
+     */
     const copyToClipboard = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void => {
         e.preventDefault();
         navigator.clipboard.writeText(text).then(

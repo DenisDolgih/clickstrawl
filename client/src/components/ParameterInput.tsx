@@ -8,6 +8,12 @@ interface Props {
     };
 }
 
+/**
+ * Renders an input field for a parameter.
+ *
+ * @param {Props} props - the component props
+ * @return {JSX.Element} the rendered input field
+ */
 const ParameterInput = (props: Props) => {
 
     return (
