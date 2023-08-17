@@ -77,13 +77,11 @@ app.post('/', cors(), (req: Request, res: Response) => {
     }
 });
 
-
 app.get('/:route', (req, res) => {
     // get route from request
     const route = req.params.route;
     // find link in DB
     Link.findOne({ from: route }).then((link) => {
-        console.log(route, link);
         if (!link) {
             res.status(404).send('Link not found');
         } else {
