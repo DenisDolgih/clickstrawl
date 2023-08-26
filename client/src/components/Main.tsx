@@ -8,6 +8,7 @@ import LinkShortenButton from './LinkShortenButton';
 import OpenQRModalButton from './OpenQRModalButton';
 import QRmodal from './QRmodal';
 import ResultLink from './ResultLink';
+import GitHubLink from './GitHubLink';
 import isValidURL from '../mixins/isValidURL';
 
 import { ILinkUpdater } from '../interfaces/interfaces';
@@ -137,6 +138,8 @@ const Main = (): JSX.Element => {
             </div>
 
             <QRmodal text={resultLink} />
+
+            <GitHubLink />
 
         </>
     )
