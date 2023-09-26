@@ -115,7 +115,7 @@ const Main = (): JSX.Element => {
 
     return (
         <>
-            <Header header="Google Analytics Link Builder" />
+            <Header header="ClicksTrawl: UTM tags Link Builder" />
 
             <ResultLink resultLink={resultLink} />
 
